@@ -1,0 +1,280 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+
+ul,li{
+	list-style-type:none;   
+}
+a {
+	text-decoration: none;
+	color: #828282;
+}
+
+html, body {
+	font-size: 12px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.page {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.page .head {
+	background: url(../images/head_bg.gif);
+	height: 38px;
+	line-height: 38px;
+	padding-left: 20px;
+	font-size: 20px;
+	font-weight: 900;
+	color: #FFF;
+}
+.head .power{
+    float:left;
+}
+.head .btn{
+    font-size:12px;
+    line-height: 20px;
+	padding:10px 20px;
+    float:right;
+}
+.head .btn input{
+	height:20px;
+    padding:0px 10px;
+}
+
+.page .left {
+	position: absolute;
+	left: 0;
+	top: 38px;
+	bottom: 0;
+	width: 230px;
+	background: #EDEDEE;
+	border-right: 1px solid #CCCCCC;
+}
+
+.page .right {
+	position: absolute;
+	left: 231px;
+	right: 0;
+	top: 38px;
+	bottom: 0;
+}
+
+.path {
+	background: url(../images/tab_bar_bg.gif);
+	height: 28px;
+	line-height: 28px;
+	padding-left: 5px;
+}
+
+.path img {
+	vertical-align: middle;
+}
+
+.path select {
+	width: 115px;
+}
+
+.tree {
+	position: absolute;
+	left: 0;
+	top: 28px;
+	right: 0;
+	bottom: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.tree ul {
+	list-style: none;
+}
+
+.tree li {
+	padding-left: 10px;
+	height: 20px;
+	line-height: 20px;
+}
+
+.tree li a {
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	text-decoration: none;
+	color: #828282;
+}
+
+.tree li:hover {
+	width: 229px;
+	background: url(../images/selected_bg.gif) repeat-x left top;
+}
+
+.tree li:hover a {
+	color: #FFF;
+}
+
+.tree div {
+	padding-left: 10px;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+}
+
+.tree .dir_close div {
+	background-repeat: no-repeat;
+	background-position: left 8px;
+	background-image: url(../images/arrow_right.gif);
+}
+
+.tree .dir_close a {
+	padding-left: 20px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url(../images/folder_close_icon.gif);
+}
+
+.tree .file a {
+	padding-left: 20px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url(../images/file_icon.gif);
+}
+
+.right .tab {
+	position: relative;
+	height: 28px;
+	line-height: 28px;
+	background: url(../images/tab_bar_bg.gif) repeat-x left center;
+}
+
+.right .tab .icon {
+	float: left;
+	width: 12px;
+	height: 28px;
+	text-align: center;
+	border-right: 1px solid #CCC;
+}
+
+.right .tab #title_right {
+	float: right;
+}
+
+.right .tab .tabtitles {
+	position: absolute;
+	left: 26px;
+	top: 0;
+	right: 13px;
+	bottom: 0;
+	height: 28px;
+	line-height: 28px;
+	overflow: hidden;
+    list-style:none;
+}
+.right .tab .tabtitles .titles {
+	height: 28px;
+	line-height: 28px;
+	overflow: hidden;
+    list-style:none;
+}
+
+.right .tab .tabtitles li {
+	width: 151px;
+	height: 28px;
+	float: left;
+	overflow: hidden;
+	cursor: pointer;
+	position: relative;
+	border-right: 1px solid #CCC;
+}
+
+.right .tab .tabtitles li span {
+	float: left;
+	display: block;
+	width: 120px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	overflow: hidden;
+	margin-left: 5px;
+}
+
+.right .tab .tabtitles li.sel {
+	background: url(../images/tab_cur_bg.gif) repeat-x left center;
+}
+
+.right .tab .titles li a {
+	display: block;
+	width: 10px;
+	height: 10px;
+	overflow: hidden;
+	position: absolute;
+	top: 9px;
+	right: 9px;
+	background: url(../images/close_icon.gif);
+}
+
+.right .tabContent {
+	position: absolute;
+	left: 0;
+	top: 28px;
+	right: 0;
+	bottom: 0;
+	/*  background: #000; */
+}
+
+.right .tabContent .content {
+	width: 100%;
+	height: 100%;
+}
+
+.right .tabContent .help {
+	padding-top: 100px;
+	padding-left: 200px;
+	line-height: 20px;
+}
+
+.right .tabContent .help a {
+	color: #F00;
+}
+
+.upload {
+	z-index: 10000;
+	display: none;
+	background: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.upload .form {
+	z-index: 10001;
+	background: rgb(255, 255, 255);
+	border: 1px solid #999;
+	width: 300px;
+	position: absolute;
+	left: 50%;
+	margin-left: -150px;
+	top: 100px;
+}
+
+.upload .form .title {
+	padding-left: 20px;
+	line-height: 30px;
+	font-weight: 900;
+}
+
+.upload .form .con {
+	padding: 0 20px 20px 20px;
+	line-height: 40px;
+}
+
+.upload .form .con .buttons {
+	text-align: right;
+}
