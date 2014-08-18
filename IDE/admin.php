@@ -56,10 +56,11 @@ class IDE_Server {
         $files = array();
         $dir = $this->baseDir . $dir . '/';
         $dir = $this->trimPath($dir);
+		$idedir = basename(dirname(__FILE__));
         $handler = opendir($dir);
         // 务必使用!==，防止目录下出现类似文件名“0”等情况
         while (($filename = readdir($handler)) !== false) {
-            if ($filename != "." && $filename != "..") {
+            if ($filename != "." && $filename != ".." && $filename != $idedir) {
                 if (is_dir($dir . $filename)) {
                     $dirs[] = $filename;
                 } else {
