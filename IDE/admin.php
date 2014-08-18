@@ -3,6 +3,15 @@
 header("Content-Type:text/html; charset=utf-8");
 $ide = new IDE_Server();
 $a = isset($_GET['a']) ? $_GET['a'] : '';
+$idedir = basename(dirname(__FILE__));
+
+$path = isset($_GET['path']) ? $_GET['path'] :
+        (isset($_POST['path']) ? $_POST['path'] : '');
+if (substr($path, 1, 3) == $idedir) {
+    echo '禁止访问';
+    die;
+}
+
 switch ($a) {
     case 'getDir':
         echo json_encode($ide->getDir($_GET['dir']));
@@ -60,7 +69,6 @@ class IDE_Server {
         $files = array();
         $dir = $this->baseDir . $dir . '/';
         $dir = $this->trimPath($dir);
-        $idedir = basename(dirname(__FILE__));
         $handler = opendir($dir);
         // 务必使用!==，防止目录下出现类似文件名“0”等情况
         while (($filename = readdir($handler)) !== false) {
