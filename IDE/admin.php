@@ -1,4 +1,5 @@
 <?php
+
 header("Content-Type:text/html; charset=utf-8");
 $ide = new IDE_Server();
 $a = isset($_GET['a']) ? $_GET['a'] : '';
@@ -47,16 +48,19 @@ switch ($a) {
         echo $ide->zipextract($_GET['zip'], $_GET['to']);
         break;
 }
+
 class IDE_Server {
+
     // 管理代码的根目录
     public $baseDir = '../';
+
     // 获取指定目路径的子目录和文件
     public function getDir($dir) {
         $dirs = array();
         $files = array();
         $dir = $this->baseDir . $dir . '/';
         $dir = $this->trimPath($dir);
-		$idedir = basename(dirname(__FILE__));
+        $idedir = basename(dirname(__FILE__));
         $handler = opendir($dir);
         // 务必使用!==，防止目录下出现类似文件名“0”等情况
         while (($filename = readdir($handler)) !== false) {
@@ -77,24 +81,21 @@ class IDE_Server {
             'files' => $files
         );
     }
+
     // 保存文件
     public function saveFile($path, $conent) {
-        
-        
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
-        
         $isBOM = checkBOM($path);
-        
-        if($isBOM){
-            writeUTF8WithBOMFile($path,$conent);
+        if ($isBOM) {
+            writeUTF8WithBOMFile($path, $conent);
             return true;
-        }else{
-           return file_put_contents($path, $conent); 
+        } else {
+            return file_put_contents($path, $conent);
         }
-        
         return false;
     }
+
     // 新建文件
     public function newFile($path) {
         $path = $this->baseDir . $path;
@@ -108,6 +109,7 @@ class IDE_Server {
         file_put_contents($path, '');
         return 'ok';
     }
+
     // 新建目录
     public function newDir($path) {
         $path = $this->baseDir . $path;
@@ -122,12 +124,14 @@ class IDE_Server {
         chmod($path, 777);
         return 'ok';
     }
+
     // 获取文件源代码
     public function getFile($path) {
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         return file_get_contents($path);
     }
+
     // 移动文件
     public function moveFile($path, $newPath) {
         $path = $this->baseDir . $path;
@@ -140,6 +144,7 @@ class IDE_Server {
             return '没有权限';
         }
     }
+
     // 移动文件夹
     public function moveDir($path, $newPath) {
         $path = $this->baseDir . $path;
@@ -152,12 +157,14 @@ class IDE_Server {
             return '没有权限';
         }
     }
+
     // 删除文件
     public function removeFile($path) {
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         return unlink($path);
     }
+
     // 删除文件夹
     public function removeDir($path) {
         $path = $this->baseDir . $path;
@@ -165,6 +172,7 @@ class IDE_Server {
         rrmdir($path);
         return 'ok';
     }
+
     // 修正path
     public function trimPath($path) {
         $path = str_replace('\\', '/', $path);
@@ -172,6 +180,7 @@ class IDE_Server {
         $path = str_replace('/./', '/', $path);
         return $path;
     }
+
     // 上传文件
     public function uploadFile($fileElementName, $path) {
         $error = "";
@@ -225,6 +234,7 @@ class IDE_Server {
             'msg' => $msg
         ));
     }
+
     // 解压文件
     public function zipextract($zip, $to) {
         $zip = $this->baseDir . $zip;
@@ -241,30 +251,27 @@ class IDE_Server {
             echo '解压失败: ' . $res;
         }
     }
+
 }
 
-
-function writeUTF8WithBOMFile($filename,$content)
-{
+function writeUTF8WithBOMFile($filename, $content) {
     $f = fopen($filename, 'w');
-    fwrite($f, pack("CCC", 0xef,0xbb,0xbf));
-    fwrite($f,$content);
+    fwrite($f, pack("CCC", 0xef, 0xbb, 0xbf));
+    fwrite($f, $content);
     fclose($f);
-    
 }
 
-function checkBOM($filename)
-{
-    $contents=file_get_contents($filename);
-    $charset[1]=substr($contents, 0, 1);
-    $charset[2]=substr($contents, 1, 1);
-    $charset[3]=substr($contents, 2, 1);
-    if (ord($charset[1])==239 && ord($charset[2])==187 && ord($charset[3])==191) {
+function checkBOM($filename) {
+    $contents = file_get_contents($filename);
+    $charset[1] = substr($contents, 0, 1);
+    $charset[2] = substr($contents, 1, 1);
+    $charset[3] = substr($contents, 2, 1);
+    if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
         return true;
+    } else {
+        return false;
     }
-    else return false;
 }
-
 
 //循环删除目录和文件函数
 function rrmdir($dir) {
