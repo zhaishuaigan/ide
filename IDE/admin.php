@@ -3,14 +3,6 @@
 header("Content-Type:text/html; charset=utf-8");
 $ide = new IDE_Server();
 $a = isset($_GET['a']) ? $_GET['a'] : '';
-$idedir = basename(dirname(__FILE__));
-
-$path = isset($_GET['path']) ? $_GET['path'] :
-        (isset($_POST['path']) ? $_POST['path'] : '');
-if (substr($path, 1, 3) == $idedir) {
-    echo '禁止访问';
-    die;
-}
 
 switch ($a) {
     case 'getDir':
@@ -72,7 +64,7 @@ class IDE_Server {
         $handler = opendir($dir);
         // 务必使用!==，防止目录下出现类似文件名“0”等情况
         while (($filename = readdir($handler)) !== false) {
-            if ($filename != "." && $filename != ".." && $filename != $idedir) {
+            if ($filename != "." && $filename != "..") {
                 if (is_dir($dir . $filename)) {
                     $dirs[] = $filename;
                 } else {
@@ -92,20 +84,23 @@ class IDE_Server {
 
     // 保存文件
     public function saveFile($path, $conent) {
+        checkpath($path);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         $isBOM = checkBOM($path);
         if ($isBOM) {
             writeUTF8WithBOMFile($path, $conent);
-            return true;
+            return 1;
         } else {
-            return file_put_contents($path, $conent);
+            file_put_contents($path, $conent);
+            return 1;
         }
-        return false;
+        return 0;
     }
 
     // 新建文件
     public function newFile($path) {
+        checkpath($path);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         if (file_exists($path)) {
@@ -142,6 +137,8 @@ class IDE_Server {
 
     // 移动文件
     public function moveFile($path, $newPath) {
+        checkpath($path);
+        checkpath($newPath);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         $newPath = $this->baseDir . $newPath;
@@ -155,6 +152,8 @@ class IDE_Server {
 
     // 移动文件夹
     public function moveDir($path, $newPath) {
+        checkpath($path);
+        checkpath($newPath);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         $newPath = $this->baseDir . $newPath;
@@ -168,6 +167,7 @@ class IDE_Server {
 
     // 删除文件
     public function removeFile($path) {
+        checkpath($path);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         return unlink($path);
@@ -175,6 +175,7 @@ class IDE_Server {
 
     // 删除文件夹
     public function removeDir($path) {
+        checkpath($path);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
         rrmdir($path);
@@ -262,6 +263,14 @@ class IDE_Server {
 
 }
 
+function checkpath($path) {
+    $idedir = basename(dirname(__FILE__));
+    if (stripos($path, $idedir) !== false) {
+        echo '禁止访问';
+        die;
+    }
+}
+
 function writeUTF8WithBOMFile($filename, $content) {
     $f = fopen($filename, 'w');
     fwrite($f, pack("CCC", 0xef, 0xbb, 0xbf));
@@ -286,11 +295,11 @@ function rrmdir($dir) {
     if (is_dir($dir)) {
         $objects = scandir($dir);
         foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-                if (filetype($dir . "/" . $object) == "dir") {
-                    rrmdir($dir . "/" . $object);
+            if ($object != '.' && $object != '..') {
+                if (filetype($dir . '/' . $object) == 'dir') {
+                    rrmdir($dir . '/' . $object);
                 } else {
-                    unlink($dir . "/" . $object);
+                    unlink($dir . '/' . $object);
                 }
             }
         }
