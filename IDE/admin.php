@@ -1,10 +1,10 @@
 <?php
-
 header("Content-Type:text/html; charset=utf-8");
 $ide = new IDE_Server();
-$a = isset($_GET['a']) ? $_GET['a'] : '';
+$act = isset($_GET['act']) ? $_GET['act'] :
+        (isset($_POST['act']) ? $_POST['act'] : '');
 
-switch ($a) {
+switch ($act) {
     case 'getDir':
         echo json_encode($ide->getDir($_GET['dir']));
         break;
@@ -42,7 +42,7 @@ switch ($a) {
         break;
 
     case 'uploadFile':
-        echo $ide->uploadFile('file', $_GET['path']);
+        echo $ide->uploadFile('file', $_POST['path']);
         break;
 
     case 'zipextract':

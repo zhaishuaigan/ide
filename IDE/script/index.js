@@ -4,7 +4,7 @@ function getDir(dir) {
         type: "get",
         dataType: "json",
         url: $('#admin').val(),
-        data: 'a=getDir&dir=' + dir,
+        data: 'act=getDir&dir=' + dir,
         success: function(data) {
             refreshList(data);
         }
@@ -58,7 +58,7 @@ function refreshList(data) {
 // 删除文件
 function removeFile(path) {
     if (confirm("确认删除这个文件吗?\n" + path)) {
-        $.get($('#admin').val() + '?a=removeFile&path=' + path, function(msg) {
+        $.get($('#admin').val(), 'act=removeFile&path=' + path, function(msg) {
             getDir($('#selPath').val());
         });
     }
@@ -66,7 +66,7 @@ function removeFile(path) {
 // 删除目录
 function removeDir(path) {
     if (confirm("确认删除这个目录吗?\n" + path)) {
-        $.get($('#admin').val() + '?a=removeDir&path=' + path, function(msg) {
+        $.get($('#admin').val(), 'act=removeDir&path=' + path, function(msg) {
             getDir($('#selPath').val());
         });
     }
@@ -139,8 +139,8 @@ function getFile(path) {
         //return;
     }
 
-    var url = $('#admin').val() + '?a=getFile&path=' + path;
-    $.get(url, function(contents) {
+    var url = $('#admin').val();
+    $.get(url, 'act=getFile&path=' + path, function(contents) {
         newTab(id, path, mode, contents)
     });
 }
@@ -166,6 +166,7 @@ function newTab(id, path, mode, contents) {
                     $('.content').show();
                 }
             }
+            delete window.editor[id];
             tabTitle.remove();
             tabContent.remove();
         })
@@ -173,15 +174,16 @@ function newTab(id, path, mode, contents) {
     });
     window.editor = window.editor ? window.editor : {};
     window.editor[id] = ace.edit(id + '_contents');
-    window.editor[id].setTheme('ace/theme/eclipse');
+    window.editor[id].getSession().setUseWrapMode(config.usewrapmode);
+    window.editor[id].setTheme('ace/theme/' + config.theme);
     window.editor[id].getSession().setMode('ace/mode/' + mode);
-    window.editor[id].setFontSize('18px');
+    window.editor[id].setFontSize(config.fontsize + 'px');
     window.editor[id].setValue(contents);
     window.editor[id].scrollToRow(0);
     window.editor[id].clearSelection();
     window.editor[id].on('change', function() {
         tabTitle.css('color', '#F00');
-    })
+    });
     changeFile(id);
 
     $('.titles:first').sortable()
@@ -194,6 +196,7 @@ function changeFile(id) {
     $('#' + id + '_contents').show();
     $('.titles .file').removeClass('sel');
     $('#' + id).addClass("sel");
+    reloadEditor(window.editor[window.selFile]);
 }
 // 保存文件
 function saveFile() {
@@ -203,9 +206,10 @@ function saveFile() {
     }
     var data = {
         path: $('#' + selFile).attr('path'),
-        content: window.editor[selFile].getValue()
+        content: window.editor[selFile].getValue(),
+        act: 'saveFile'
     };
-    $.post($('#admin').val() + '?a=saveFile', data, function(msg) {
+    $.post($('#admin').val(), data, function(msg) {
         if (parseInt(msg) == 1) {
             $('#' + selFile).css('color', '');
         } else {
@@ -227,8 +231,8 @@ function saveAllFile() {
 function newFile() {
     var fileName = prompt('请输入文件名', $('#selPath').val() + 'newFile.php');
     if (fileName) {
-        var url = $('#admin').val() + '?a=newFile&path=' + fileName;
-        $.get(url, function(msg) {
+        var url = $('#admin').val();
+        $.get(url, 'act=newFile&path=' + fileName, function(msg) {
             if (msg != 'ok') {
                 alert(msg);
             } else {
@@ -242,8 +246,8 @@ function newFile() {
 function newDir() {
     var dirName = prompt('请输入目录名', $('#selPath').val() + 'newDir');
     if (dirName) {
-        var url = $('#admin').val() + '?a=newDir&path=' + dirName;
-        $.get(url, function(msg) {
+        var url = $('#admin').val();
+        $.get(url, 'act=newDir&path=' + dirName, function(msg) {
             if (msg != 'ok') {
                 alert(msg);
             } else {
@@ -256,9 +260,8 @@ function newDir() {
 function moveFile(oldName) {
     var newName = prompt('请输入新文件名', oldName);
     if (newName) {
-        var url = $('#admin').val() + '?a=moveFile&path=' + oldName
-                + '&newPath=' + newName;
-        $.get(url, function(msg) {
+        var url = $('#admin').val();
+        $.get(url, 'act=moveFile&path=' + oldName + '&newPath=' + newName, function(msg) {
             if (msg != 'ok') {
                 alert(msg);
             } else {
@@ -271,26 +274,27 @@ function moveFile(oldName) {
 function moveDir(oldName) {
     var newName = prompt('请输入新目录名', oldName);
     if (newName) {
-        var url = $('#admin').val() + '?a=moveDir&path=' + oldName
-                + '&newPath=' + newName;
-        $.get(url, function(msg) {
-            if (msg != 'ok') {
-                alert(msg);
-            } else {
-                getDir($('#selPath').val());
-            }
-        });
+        var url = $('#admin').val();
+        $.get(url, 'act=moveDir&path=' + oldName
+                + '&newPath=' + newName, function(msg) {
+                    if (msg != 'ok') {
+                        alert(msg);
+                    } else {
+                        getDir($('#selPath').val());
+                    }
+                });
     }
 }
 // 上传文件
 function upload() {
     $.ajaxFileUpload({
-        url: $('#admin').val() + '?a=uploadFile&path=' + $('#selPath').val(),
+        url: $('#admin').val(),
         secureuri: false,
         fileElementId: 'file',
         dataType: 'json',
         data: {
-            path: $('#selPath').val()
+            path: $('#selPath').val(),
+            act: 'uploadFile',
         },
         success: function(data, status) {
             if (typeof (data.error) != 'undefined') {
@@ -311,8 +315,8 @@ function upload() {
 function zip(zip) {
     var to = prompt('请输入解压到的目录', $('#selPath').val());
     if (to) {
-        url = $('#admin').val() + '?a=zipextract&zip=' + zip + '&to=' + to;
-        $.get(url, function(msg) {
+        url = $('#admin').val();
+        $.get(url, 'act=zipextract&zip=' + zip + '&to=' + to, function(msg) {
             if (msg != 'ok') {
                 alert(msg);
             } else {
@@ -320,6 +324,18 @@ function zip(zip) {
             }
         });
     }
+}
+
+function eachEditor(fun) {
+    window.editor = window.editor ? window.editor : {};
+    for (var id in window.editor) {
+        fun(window.editor[id]);
+    }
+}
+
+function reloadEditor(editor) {
+    editor.getSession().setUseWrapMode(!config.usewrapmode);
+    editor.getSession().setUseWrapMode(config.usewrapmode);
 }
 
 // 加载事件
@@ -334,6 +350,9 @@ $(function() {
             $('.left').hide();
             window.rightLeft = $('.right').css('left');
             $('.right').css('left', 0);
+        }
+        if (window.editor) {
+            reloadEditor(window.editor[window.selFile]);
         }
     });
     $('#title_left').click(function() {
