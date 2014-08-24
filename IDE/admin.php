@@ -124,7 +124,7 @@ class IDE_Server {
             return '目录已存在!';
         }
         mkdir($path);
-        chmod($path, 777);
+        chmod($path, 0777);
         return 'ok';
     }
 
@@ -237,6 +237,7 @@ class IDE_Server {
             $path = $this->baseDir . $path;
             $path = $this->trimPath($path);
             move_uploaded_file($_FILES[$fileElementName]['tmp_name'], $path . $_FILES[$fileElementName]['name']);
+            chmod($path . $_FILES[$fileElementName]['name'], 0777);
         }
         return json_encode(array(
             'error' => $error,
