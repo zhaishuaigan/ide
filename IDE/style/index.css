@@ -235,7 +235,8 @@ html, body {
 .right .tabContent .help {
 	padding-top: 100px;
 	padding-left: 200px;
-	line-height: 20px;
+	line-height: 28px;
+	font-size: 20px;
 }
 
 .right .tabContent .help a {
