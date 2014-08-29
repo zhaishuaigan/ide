@@ -4,13 +4,11 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <title>IDE</title>
         <link rel="stylesheet" href="style/index.css" />
-        <script type="text/javascript">
-            var config = {"theme":"ambiance","fontsize":"14","usewrapmode":"1"};
-        </script>
         <script src="Ace/src/ace.js" type="text/javascript"></script>
         <script src="script/jquery.min.js" type="text/javascript"></script>
         <script src="script/jquery.sortable.js" type="text/javascript"></script>
         <script src="script/ajaxfileupload.js" type="text/javascript"></script>
+        <script src="script/cookie.js" type="text/javascript"></script>
         <script src="script/index.js" type="text/javascript"></script>
     </head>
     <body>
@@ -18,6 +16,62 @@
             <div class="head">
                 <div class="power">Power By zhaishuaigan@qq.com</div>
                 <div class="btn">
+                    <a href="javascript:void(0);" id="link_setting">[设置]</a>
+                    <span id="setting">
+                        <a href="javascript:void(0);" id="link_setting_hide">[隐藏设置]</a>
+                        选择主题: 
+                        <select id="setTheme">
+                            <option value="ambiance">Ambiance</option>
+                            <option value="chaos">Chaos</option>
+                            <option value="chrome">Chrome</option>
+                            <option value="clouds">Clouds</option>
+                            <option value="clouds_midnight">Clouds Midnight</option>
+                            <option value="cobalt">Cobalt</option>
+                            <option value="crimson_editor">Crimson Editor</option>
+                            <option value="dawn">Dawn</option>
+                            <option value="dreamweaver">Dreamweaver</option>
+                            <option value="eclipse">Eclipse</option>
+                            <option value="github">Github</option>
+                            <option value="idle_fingers">Idle Fingers</option>
+                            <option value="kr_theme">Kr Theme</option>
+                            <option value="merbivore">Merbivore</option>
+                            <option value="merbivore_soft">Merbivore Soft</option>
+                            <option value="mono_industrial">Mono Industrial</option>
+                            <option value="monokai">Monokai</option>
+                            <option value="pastel_on_dark">Pastel On Dark</option>
+                            <option value="solarized_dark">Solarized Dark</option>
+                            <option value="solarized_light">Solarized Light</option>
+                            <option value="terminal">Terminal</option>
+                            <option value="textmate">Textmate</option>
+                            <option value="tomorrow">Tomorrow</option>
+                            <option value="tomorrow_night">Tomorrow Night</option>
+                            <option value="tomorrow_night_blue">Tomorrow Night Blue</option>
+                            <option value="tomorrow_night_bright">Tomorrow Night Bright</option>
+                            <option value="tomorrow_night_eighties">Tomorrow Night Eighties</option>
+                            <option value="twilight">Twilight</option>
+                            <option value="vibrant_ink">Vibrant Ink</option>
+                            <option value="xcode">Xcode</option>
+                        </select>
+                        字体大小:
+                        <select id="setFontSize">
+                            <option value="12">12px</option>
+                            <option value="14">14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                            <option value="20">20px</option>
+                            <option value="22">22px</option>
+                            <option value="24">24px</option>
+                            <option value="26">26px</option>
+                            <option value="28">28px</option>
+                            <option value="30">30px</option>
+                        </select>
+                        <label for="setUseWrapMode">自动换行: </label>
+                        <select id="setUseWrapMode">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </span>
+                    <span>　</span>
                     <input type="button" class="btn_save" value="保存" />
                     <input type="button" class="btn_saveall" value="保存所有" />
                     <input type="button" class="btn_closeall" value="关闭所有" />
@@ -70,12 +124,12 @@
                 </div>
             </div>
         </div>
-<div style="display:none">
-<script type="text/javascript">
-var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fe111de154d46d4d1d5e40cabf6c1af12' type='text/javascript'%3E%3C/script%3E"));
-</script>
-</div>
+        <div style="display:none">
+            <script type="text/javascript">
+                var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fe111de154d46d4d1d5e40cabf6c1af12' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+        </div>
 
     </body>
 </html>

@@ -1,3 +1,10 @@
+// 配置
+var config = {
+    theme: getCookie('theme') ? getCookie('theme') : 'ambiance', // 默认主题
+    fontsize: getCookie('fontsize') ? getCookie('fontsize') : '14', // 字体大小
+    usewrapmode: getCookie('usewrapmode') ? getCookie('usewrapmode') : false   // 自动换行
+};
+
 // 获取指定目录的文件列表
 function getDir(dir) {
     $.ajax({
@@ -174,10 +181,8 @@ function newTab(id, path, mode, contents) {
     });
     window.editor = window.editor ? window.editor : {};
     window.editor[id] = ace.edit(id + '_contents');
-    window.editor[id].getSession().setUseWrapMode(config.usewrapmode);
-    window.editor[id].setTheme('ace/theme/' + config.theme);
     window.editor[id].getSession().setMode('ace/mode/' + mode);
-    window.editor[id].setFontSize(config.fontsize + 'px');
+    reloadEditor(window.editor[id]);
     window.editor[id].setValue(contents);
     window.editor[id].scrollToRow(0);
     window.editor[id].clearSelection();
@@ -334,8 +339,15 @@ function eachEditor(fun) {
 }
 
 function reloadEditor(editor) {
+    window.editor = window.editor ? window.editor : {};
+    editor = editor ? editor : window.editor[window.selFile];
+    if (!editor) {
+        return;
+    }
     editor.getSession().setUseWrapMode(!config.usewrapmode);
     editor.getSession().setUseWrapMode(config.usewrapmode);
+    editor.setFontSize(config.fontsize + 'px');
+    editor.setTheme('ace/theme/' + config.theme);
 }
 
 // 加载事件
@@ -352,7 +364,7 @@ $(function() {
             $('.right').css('left', 0);
         }
         if (window.editor) {
-            reloadEditor(window.editor[window.selFile]);
+            reloadEditor();
         }
     });
     $('#title_left').click(function() {
@@ -398,4 +410,37 @@ $(function() {
         upload();
         $('.upload').hide();
     });
+
+    // 设置主题
+    $('#setTheme').val(config.theme);
+    $('#setTheme').change(function() {
+        config.theme = $('#setTheme').val();
+        reloadEditor();
+        setCookie('theme', config.theme);
+    });
+
+    // 设置字体大小
+    $('#setFontSize').val(config.fontsize);
+    $('#setFontSize').change(function() {
+        config.fontsize = $('#setFontSize').val();
+        reloadEditor();
+        setCookie('fontsize', config.fontsize);
+    });
+
+    // 设置自动换行
+    $('#setUseWrapMode').val(config.usewrapmode);
+    $('#setUseWrapMode').change(function() {
+        config.usewrapmode = $('#setUseWrapMode').val();
+        reloadEditor();
+        setCookie('usewrapmode', config.usewrapmode);
+    });
+
+    $('#link_setting').click(function() {
+        $('#setting').toggle();
+    });
+    $('#link_setting_hide').click(function() {
+        $('#setting').toggle();
+    });
+
+
 });
