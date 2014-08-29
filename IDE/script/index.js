@@ -2,7 +2,7 @@
 var config = {
     theme: getCookie('theme') ? getCookie('theme') : 'ambiance', // 默认主题
     fontsize: getCookie('fontsize') ? getCookie('fontsize') : '14', // 字体大小
-    usewrapmode: getCookie('usewrapmode') ? getCookie('usewrapmode') : false   // 自动换行
+    usewrapmode: getCookie('usewrapmode') !== null ? getCookie('usewrapmode') : '0'   // 自动换行
 };
 
 // 获取指定目录的文件列表
