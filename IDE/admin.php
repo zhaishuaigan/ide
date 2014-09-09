@@ -348,7 +348,7 @@ function is_hidden($path) {
 }
 
 /**
- * 作用: 写入文件, 同时检测是否包含bom头信息
+ * 作用: 写入包含bom头信息的文件
  * @param type $filename 要写入的文件名
  * @param type $content 要写入的内容
  */
