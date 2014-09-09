@@ -72,7 +72,7 @@ class Helper {
     public function getDir($dir) {
         $dirs = array();
         $files = array();
-        $path = '/' . $dir;
+        $path = $dir;
         $dir = $this->baseDir . $dir . '/';
         $dir = $this->trimPath($dir);
         $handler = opendir($dir);

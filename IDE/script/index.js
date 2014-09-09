@@ -11,7 +11,7 @@ function getDir(dir) {
         type: "get",
         dataType: "json",
         url: $('#admin').val(),
-        data: 'act=getDir&dir=' + dir,
+        data: 'act=getDir&dir=' + (dir ? dir : '/'),
         success: function(data) {
             refreshList(data);
         }
