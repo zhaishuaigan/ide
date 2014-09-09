@@ -1,4 +1,8 @@
 <?php
+/**
+ * 作用: 核心处理文件, 用来处理文件列表获取, 修改, 删除, 等
+ * @作者 翟帅干  zhaishuaigan@qq.com
+ */
 header("Content-Type:text/html; charset=utf-8");
 $ide = new IDE_Server();
 $act = isset($_GET['act']) ? $_GET['act'] :
@@ -59,12 +63,13 @@ class IDE_Server {
     public function getDir($dir) {
         $dirs = array();
         $files = array();
+        $path = '/'. $dir;
         $dir = $this->baseDir . $dir . '/';
         $dir = $this->trimPath($dir);
         $handler = opendir($dir);
         // 务必使用!==，防止目录下出现类似文件名“0”等情况
         while (($filename = readdir($handler)) !== false) {
-            if ($filename != "." && $filename != "..") {
+            if ($filename != "." && $filename != ".." && !is_hidden($path . $filename)) {
                 if (is_dir($dir . $filename)) {
                     $dirs[] = $filename;
                 } else {
@@ -265,11 +270,22 @@ class IDE_Server {
 }
 
 function checkpath($path) {
-    $idedir = basename(dirname(__FILE__));
-    if (stripos($path, $idedir) !== false) {
-        echo '禁止访问';
-        die;
+    $config = include 'config.php';
+    foreach ($config['readOnly'] as $val) {
+        if (substr($path, 0, strlen($val)) === $val) {
+            die('禁止访问: ' . $path);
+        }
     }
+}
+
+function is_hidden($path) {
+    $config = include 'config.php';
+    foreach ($config['hidden'] as $val) {
+        if (substr($path, 0, strlen($val)) === $val) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function writeUTF8WithBOMFile($filename, $content) {
