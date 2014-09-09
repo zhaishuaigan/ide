@@ -1,60 +1,65 @@
 <?php
+
 /**
  * 作用: 核心处理文件, 用来处理文件列表获取, 修改, 删除, 等
  * @作者 翟帅干  zhaishuaigan@qq.com
  */
 header("Content-Type:text/html; charset=utf-8");
-$ide = new IDE_Server();
-$act = isset($_GET['act']) ? $_GET['act'] :
-        (isset($_POST['act']) ? $_POST['act'] : '');
+$config = include 'config.php';
+$ide = new Helper();
+$ide->baseDir = $config['baseDir'];
+$act = I('act');
 
 switch ($act) {
     case 'getDir':
-        echo json_encode($ide->getDir($_GET['dir']));
+        echo json_encode($ide->getDir(I('dir')));
         break;
 
     case 'getFile':
-        echo $ide->getFile($_GET['path']);
+        echo $ide->getFile(I('path'));
         break;
 
     case 'saveFile':
-        echo $ide->saveFile($_POST['path'], $_POST['content']);
+        echo $ide->saveFile(I('path'), I('content'));
         break;
 
     case 'newFile':
-        echo $ide->newFile($_GET['path']);
+        echo $ide->newFile(I('path'));
         break;
 
     case 'newDir':
-        echo $ide->newDir($_GET['path']);
+        echo $ide->newDir(I('path'));
         break;
 
     case 'moveFile':
-        echo $ide->moveFile($_GET['path'], $_GET['newPath']);
+        echo $ide->moveFile(I('path'), I('newPath'));
         break;
 
     case 'moveDir':
-        echo $ide->moveDir($_GET['path'], $_GET['newPath']);
+        echo $ide->moveDir(I('path'), I('newPath'));
         break;
 
     case 'removeFile':
-        echo $ide->removeFile($_GET['path']);
+        echo $ide->removeFile(I('path'));
         break;
 
     case 'removeDir':
-        echo $ide->removeDir($_GET['path']);
+        echo $ide->removeDir(I('path'));
         break;
 
     case 'uploadFile':
-        echo $ide->uploadFile('file', $_POST['path']);
+        echo json_encode($ide->uploadFile('file', I('path')));
         break;
 
     case 'zipextract':
-        echo $ide->zipextract($_GET['zip'], $_GET['to']);
+        echo $ide->zipextract(I('zip'), I('to'));
+        break;
+    default:
+        echo '操作不存在!';
         break;
 }
 
-class IDE_Server {
+class Helper {
 
     // 管理代码的根目录
     public $baseDir = '../';
@@ -67,7 +72,7 @@ class IDE_Server {
     public function getDir($dir) {
         $dirs = array();
         $files = array();
-        $path = '/'. $dir;
+        $path = '/' . $dir;
         $dir = $this->baseDir . $dir . '/';
         $dir = $this->trimPath($dir);
         $handler = opendir($dir);
@@ -241,7 +246,7 @@ class IDE_Server {
      * 作用: 上传文件
      * @param string $fileElementName 表单文件域的名称
      * @param string $path 上传到的目录 
-     * @return string 经过json_encode的数组, 包括error和msg字段
+     * @return array 包括error和msg字段
      */
     public function uploadFile($fileElementName, $path) {
         $error = "";
@@ -283,17 +288,14 @@ class IDE_Server {
         } elseif (empty($_FILES[$fileElementName]['tmp_name']) || $_FILES[$fileElementName]['tmp_name'] == 'none') {
             $error = '没有文件上传。';
         } else {
-            $msg.= ' 文件名: ' . $_FILES[$fileElementName]['name'] . ', ';
-            $msg.= ' 文件大小: ' . @filesize($_FILES[$fileElementName]['tmp_name']);
+            $msg .= ' 文件名: ' . $_FILES[$fileElementName]['name'] . ', ';
+            $msg .= ' 文件大小: ' . @filesize($_FILES[$fileElementName]['tmp_name']);
             $path = $this->baseDir . $path;
             $path = $this->trimPath($path);
             move_uploaded_file($_FILES[$fileElementName]['tmp_name'], $path . $_FILES[$fileElementName]['name']);
             chmod($path . $_FILES[$fileElementName]['name'], 0777);
         }
-        return json_encode(array(
-            'error' => $error,
-            'msg' => $msg
-        ));
+        return array('error' => $error, 'msg' => $msg);
     }
 
     /**
@@ -397,5 +399,18 @@ function rrmdir($dir) {
     }
 }
 
+/**
+ * 作用: 接收参数
+ * @param string $name 参数名, get或post
+ */
+function I($name) {
+    if (isset($_GET[$name])) {
+        return $_GET[$name];
+    }
+    if (isset($_POST[$name])) {
+        return $_POST[$name];
+    }
+    return null;
+}
 
 /* 文件结束 */
