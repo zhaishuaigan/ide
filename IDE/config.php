@@ -23,9 +23,6 @@ return array(
     ),
     // 隐藏文件列表
     'hidden' => array(
-        '/index.php',
-        '/index.html',
-        '/IDE',
         '/proxy_temp',
         '/client_body_temp',
         '/uwsgi_temp',
