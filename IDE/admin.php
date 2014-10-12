@@ -7,6 +7,8 @@
 header("Content-Type:text/html; charset=utf-8");
 $config = include 'config.php';
 $ide = new Helper();
+$config['baseDir'] = str_replace('\\', '/', $config['baseDir']);
+$config['baseDir'] = str_replace('//', '/', $config['baseDir'] . '/');
 $ide->baseDir = $config['baseDir'];
 $act = I('act');
 
