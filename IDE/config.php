@@ -5,7 +5,7 @@
  */
 return array(
     // 编辑根目录, 相对于admin.php的路径, 也可以是绝对路径
-    'baseDir' => '../',
+    'baseDir' => dirname(dirname(__FILE__)),
     // 只读文件列表
     'readOnly' => array(
         '/index.php',
