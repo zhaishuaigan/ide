@@ -407,10 +407,18 @@ function rrmdir($dir) {
  */
 function I($name) {
     if (isset($_GET[$name])) {
-        return $_GET[$name];
+        if (get_magic_quotes_gpc()) {
+            return stripslashes($_GET[$name]);
+        } else {
+            return $_GET[$name];
+        }
     }
     if (isset($_POST[$name])) {
-        return $_POST[$name];
+        if (get_magic_quotes_gpc()) {
+            return stripslashes($_POST[$name]);
+        } else {
+            return $_POST[$name];
+        }
     }
     return null;
 }
