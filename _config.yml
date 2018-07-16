@@ -1,0 +1,8 @@
+title: Ide
+description: 一个php版的在线网页开发工具
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-slate
+
+gems:
+  - jekyll-mentions
