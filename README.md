@@ -19,7 +19,7 @@
 ## 快速安装方法
 
 ```
-php -r "copy('https://raw.githubusercontent.com/zhaishuaigan/ide/master/install.php', 'phpide-setup.php')"
+php -r "copy('https://raw.githubusercontent.com/zhaishuaigan/ide/master/install.php', 'phpide-setup.php');"
 php phpide-setup.php
 php -r "unlink('phpide-setup.php');"
 ```

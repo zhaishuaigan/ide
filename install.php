@@ -2,7 +2,7 @@
 /**
  * 作用: 用于命令行安装代码到项目目录
  * @作者 翟帅干  zhaishuaigan@qq.com
- * 使用方法: php -r "copy('https://raw.githubusercontent.com/zhaishuaigan/ide/master/install.php', 'phpide-setup.php')"
+ * 使用方法: php -r "copy('https://raw.githubusercontent.com/zhaishuaigan/ide/master/install.php', 'phpide-setup.php');"
  *          php phpide-setup.php
  *          php -r "unlink('phpide-setup.php');"
  */
