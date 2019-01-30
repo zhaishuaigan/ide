@@ -15,3 +15,11 @@
 具体文档可以到 http://phpide.now.sh/IDE/doc 中查看
 
 注: 在线编辑器并没有做过多的权限验证, 请不要搞破坏, 会导致别人无法测试.
+
+## 快速安装方法
+
+```
+php -r "copy('https://raw.githubusercontent.com/zhaishuaigan/ide/master/install.php', 'phpide-setup.php')"
+php phpide-setup.php
+php -r "unlink('phpide-setup.php');"
+```
